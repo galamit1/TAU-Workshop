@@ -24,6 +24,8 @@ from transformers import get_scheduler
 import torch
 import evaluate
 from tqdm.auto import tqdm
+from torch.nn.parallel import DataParallel
+
 
 dataset = load_dataset("yelp_review_full")
 
@@ -74,8 +76,6 @@ tokenized_datasets = tokenized_datasets.remove_columns(["text"])
 tokenized_datasets = tokenized_datasets.rename_column("label", "labels")
 tokenized_datasets.set_format("torch")
 
-small_train_dataset = tokenized_datasets["train"]
-small_eval_dataset = tokenized_datasets["test"]
 """### DataLoader
 
 Create a `DataLoader` for your training and test datasets so you can iterate over batches of data:
@@ -112,6 +112,9 @@ lr_scheduler = get_scheduler(
 if torch.cuda.is_available():
     print("cuda")
     device = torch.device("cuda")
+    print("device count = ", torch.cuda.device_count())
+    if torch.cuda.device_count() > 1:
+        model = DataParallel(model)  # Wrap the model with DataParallel
 else:
     device = torch.device("cpu")
     print("cpu")
@@ -136,8 +139,18 @@ progress_bar = tqdm(range(num_training_steps))
 model.train()
 for epoch in range(num_epochs):
     for batch in train_dataloader:
-        batch = {k: v.to(device) for k, v in batch.items()}
-        outputs = model(**batch)
+        input_ids = batch["input_ids"].to(device)
+        attention_mask = batch["attention_mask"].to(device)
+        labels = batch["labels"].to(device)
+
+        # Now you can create a new dictionary to pass to the model
+        inputs = {
+            "input_ids": input_ids,
+            "attention_mask": attention_mask,
+            "labels": labels,
+        }
+
+        outputs = model(**inputs)
         loss = outputs.loss
         loss.backward()
 
@@ -145,6 +158,12 @@ for epoch in range(num_epochs):
         lr_scheduler.step()
         optimizer.zero_grad()
         progress_bar.update(1)
+
+
+#    for batch in train_dataloader:
+#        batch = {k: v.to(device) for k, v in batch.items()}
+#        outputs = model(**batch)
+#        loss = outputs.loss
         
 model.save_pretrained("/home/yandex/MLW2023/jg/pretrained_on_yelp_full")
 print("saved")
