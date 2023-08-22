@@ -45,8 +45,8 @@ tokenized_datasets = tokenized_datasets.rename_column("label", "labels")
 tokenized_datasets.set_format("torch")
 """If you like, you can create a smaller subset of the full dataset to fine-tune on to reduce the time it takes:"""
 
-small_train_dataset = tokenized_datasets["train"]
-small_eval_dataset = tokenized_datasets["test"]
+small_train_dataset = tokenized_datasets["train"].shuffle(seed=42).select(range(1000))
+small_eval_dataset = tokenized_datasets["test"].shuffle(seed=42).select(range(1000))
 
 #from transformers import TrainingArguments
 
@@ -62,18 +62,6 @@ def compute_metrics(eval_pred):
     predictions = np.argmax(logits, axis=-1)
     return metric.compute(predictions=predictions, references=labels)
 
-"""If you'd like to monitor your evaluation metrics during fine-tuning, specify the `evaluation_strategy` parameter in your training arguments to report the evaluation metric at the end of each epoch:"""
-
-
-
-"""[Trainer](https://huggingface.co/docs/transformers/main/en/main_classes/trainer#transformers.Trainer) takes care of the training loop and allows you to fine-tune a model in a single line of code. For users who prefer to write their own training loop, you can also fine-tune a 🤗 Transformers model in native PyTorch.
-
-At this point, you may need to restart your notebook or execute the following code to free some memory:
-"""
-
-#del model
-#del trainer
-#torch.cuda.empty_cache()
 
 
 """### DataLoader
@@ -113,8 +101,8 @@ if torch.cuda.is_available():
     print("cuda")
     device = torch.device("cuda")
     print("device count = ", torch.cuda.device_count())
-    if torch.cuda.device_count() > 1:
-        model = DataParallel(model)  # Wrap the model with DataParallel
+#    if torch.cuda.device_count() > 1:
+#        model = DataParallel(model)  # Wrap the model with DataParallel
 else:
     device = torch.device("cpu")
     print("cpu")
@@ -139,18 +127,20 @@ progress_bar = tqdm(range(num_training_steps))
 model.train()
 for epoch in range(num_epochs):
     for batch in train_dataloader:
-        input_ids = batch["input_ids"].to(device)
-        attention_mask = batch["attention_mask"].to(device)
-        labels = batch["labels"].to(device)
-
-        # Now you can create a new dictionary to pass to the model
-        inputs = {
-            "input_ids": input_ids,
-            "attention_mask": attention_mask,
-            "labels": labels,
-        }
-
-        outputs = model(**inputs)
+#        input_ids = batch["input_ids"].to(device)
+#        attention_mask = batch["attention_mask"].to(device)
+#        labels = batch["labels"].to(device)
+#
+#        # Now you can create a new dictionary to pass to the model
+#        inputs = {
+#            "input_ids": input_ids,
+#            "attention_mask": attention_mask,
+#            "labels": labels,
+#        }
+#
+#        outputs = model(**inputs)
+        batch = {k: v.to(device) for k, v in batch.items()}
+        outputs = model(**batch)
         loss = outputs.loss
         loss.backward()
 
@@ -161,8 +151,6 @@ for epoch in range(num_epochs):
 
 
 #    for batch in train_dataloader:
-#        batch = {k: v.to(device) for k, v in batch.items()}
-#        outputs = model(**batch)
 #        loss = outputs.loss
         
 model.save_pretrained("/home/yandex/MLW2023/jg/pretrained_on_yelp_full")
