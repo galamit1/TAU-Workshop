@@ -40,6 +40,9 @@ def tokenize_function(examples):
 
 tokenized_datasets = dataset.map(tokenize_function, batched=True)
 
+tokenized_datasets = tokenized_datasets.remove_columns(["text"])
+tokenized_datasets = tokenized_datasets.rename_column("label", "labels")
+tokenized_datasets.set_format("torch")
 """If you like, you can create a smaller subset of the full dataset to fine-tune on to reduce the time it takes:"""
 
 small_train_dataset = tokenized_datasets["train"]
@@ -72,9 +75,6 @@ At this point, you may need to restart your notebook or execute the following co
 #del trainer
 #torch.cuda.empty_cache()
 
-tokenized_datasets = tokenized_datasets.remove_columns(["text"])
-tokenized_datasets = tokenized_datasets.rename_column("label", "labels")
-tokenized_datasets.set_format("torch")
 
 """### DataLoader
 
