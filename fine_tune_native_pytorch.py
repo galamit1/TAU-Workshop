@@ -17,7 +17,7 @@ import numpy as np
 import evaluate
 import torch
 from transformers import Trainer
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, TensorDataset
 from transformers import AutoModelForSequenceClassification
 from torch.optim import AdamW
 from transformers import get_scheduler
@@ -35,7 +35,7 @@ tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
 
 
 def tokenize_function(examples):
-    return tokenizer(examples["text"], padding="max_length", truncation=True)
+    return tokenizer(examples["text"], padding="max_length", truncation=True, return_tensors="pt")
 
 
 tokenized_datasets = dataset.map(tokenize_function, batched=True)
@@ -45,9 +45,11 @@ tokenized_datasets = tokenized_datasets.rename_column("label", "labels")
 tokenized_datasets.set_format("torch")
 """If you like, you can create a smaller subset of the full dataset to fine-tune on to reduce the time it takes:"""
 
-small_train_dataset = tokenized_datasets["train"].shuffle(seed=42).select(range(1000))
-small_eval_dataset = tokenized_datasets["test"].shuffle(seed=42).select(range(1000))
+#small_train_dataset = tokenized_datasets["train"].shuffle(seed=42).select(range(1000))
+#small_eval_dataset = tokenized_datasets["test"].shuffle(seed=42).select(range(1000))
 
+small_train_dataset = tokenized_datasets["train"].shuffle(seed=42)
+small_eval_dataset = tokenized_datasets["test"].shuffle(seed=42)
 #from transformers import TrainingArguments
 
 #training_args = TrainingArguments(output_dir="/home/yandex/MLW2023/jg/native_test_trainer", evaluation_strategy="epoch")
@@ -78,6 +80,19 @@ eval_dataloader = DataLoader(small_eval_dataset, batch_size=8)
 
 model = AutoModelForSequenceClassification.from_pretrained("bert-base-cased", num_labels=5)
 
+"""Lastly, specify `device` to use a GPU if you have access to one. Otherwise, training on a CPU may take several hours instead of a couple of minutes."""
+
+
+if torch.cuda.is_available():
+    print("cuda")
+    device = torch.device("cuda")
+    print("device count = ", torch.cuda.device_count())
+    if torch.cuda.device_count() > 1:
+        model = DataParallel(model)  # Wrap the model with DataParallel
+else:
+    device = torch.device("cpu")
+    print("cpu")
+
 """### Optimizer and learning rate scheduler
 
 Create an optimizer and learning rate scheduler to fine-tune the model. Let's use the [`AdamW`](https://pytorch.org/docs/stable/generated/torch.optim.AdamW.html) optimizer from PyTorch:
@@ -94,18 +109,6 @@ lr_scheduler = get_scheduler(
     name="linear", optimizer=optimizer, num_warmup_steps=0, num_training_steps=num_training_steps
 )
 
-"""Lastly, specify `device` to use a GPU if you have access to one. Otherwise, training on a CPU may take several hours instead of a couple of minutes."""
-
-
-if torch.cuda.is_available():
-    print("cuda")
-    device = torch.device("cuda")
-    print("device count = ", torch.cuda.device_count())
-#    if torch.cuda.device_count() > 1:
-#        model = DataParallel(model)  # Wrap the model with DataParallel
-else:
-    device = torch.device("cpu")
-    print("cpu")
 model.to(device)
 
 """<Tip>
@@ -142,6 +145,7 @@ for epoch in range(num_epochs):
         batch = {k: v.to(device) for k, v in batch.items()}
         outputs = model(**batch)
         loss = outputs.loss
+        loss = loss.mean()
         loss.backward()
 
         optimizer.step()
@@ -153,7 +157,7 @@ for epoch in range(num_epochs):
 #    for batch in train_dataloader:
 #        loss = outputs.loss
         
-model.save_pretrained("/home/yandex/MLW2023/jg/pretrained_on_yelp_full")
+model.save_pretrained("/home/yandex/MLW2023/jg/pretrained_on_yelp_par_big")
 print("saved")
 
 
@@ -187,3 +191,15 @@ For more fine-tuning examples, refer to:
 
 - [🤗 Transformers Notebooks](https://huggingface.co/docs/transformers/main/en/notebooks) contains various notebooks on how to fine-tune a model for specific tasks in PyTorch and TensorFlow.
 """
+# For single tests of the models accuracy. Returns an int
+def yaakov_single_test(input_str):
+    batch = tokenizer(input_str, padding="max_length", truncation=True, return_tensors="pt")
+    batch = {k: v.to(device) for k, v in batch.items()}
+    with torch.no_grad():
+        outputs = model(**batch)
+    logits = outputs.logits
+    predictions = torch.argmax(logits, dim=-1)
+    return predictions.item()
+
+
+
