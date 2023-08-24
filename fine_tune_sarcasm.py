@@ -41,8 +41,8 @@ tokenized_train_datasets.set_format("torch")
 
 """If you like, you can create a smaller subset of the full dataset to fine-tune on to reduce the time it takes:"""
 
-small_train_dataset = tokenized_train_datasets.shuffle(seed=42).select(range(2000))
-small_eval_dataset = tokenized_test_datasets["test"].shuffle(seed=42).select(range(2000))
+small_train_dataset = tokenized_train_datasets.shuffle(seed=42)
+small_eval_dataset = tokenized_test_datasets.shuffle(seed=42)
 
 
 
@@ -148,7 +148,7 @@ for epoch in range(num_epochs):
 #    for batch in train_dataloader:
 #        loss = outputs.loss
         
-model.save_pretrained("/home/yandex/MLW2023/jg/pretrained_sarcasm_on_bert_2000")
+model.module.save_pretrained("/home/yandex/MLW2023/jg/pretrained_sarcasm_on_bert")
 print("saved")
 
 
