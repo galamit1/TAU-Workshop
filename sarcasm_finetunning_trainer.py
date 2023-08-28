@@ -124,6 +124,7 @@ print(evel_results)
 trainer.train()
 evel_results = trainer.evaluate()
 print(evel_results)
+trainer.save_model(pretrained_dir)
 
 # trainer.push_to_hub()
 

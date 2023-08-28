@@ -3,7 +3,7 @@
 #SBATCH --job-name=train_sarcasm_pytorch_gpus
 #SBATCH --output=/home/yandex/MLW2023/jg/TAU-Workshop/dist_output.out # redirect stdout
 #SBATCH --error=/home/yandex/MLW2023/jg/TAU-Workshop/edist_error_output.err # redirect stderr
-#SBATCH --partition=studentbatch # (see resources section)
+#SBATCH --partition=studentkillable # (see resources section)
 #SBATCH --time=900 #max time (minutes)
 #SBATCH --signal=USR1@120 # how to end job when time’s up
 #SBATCH --nodes=1 # number of machines
