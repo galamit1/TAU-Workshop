@@ -17,7 +17,7 @@ def chat_with_gpt(prompt):
     return response.choices[0].text.strip()
 
 # Example usage
-prompt = "here is the contents of my current directory:
+prompt = """here is the contents of my current directory:
     drwxr-sr-x 30 jg yandexcs  4096 Aug 22 05:52 ana3
 drwxr-sr-x  5 jg yandexcs  4096 Aug  8 03:43 anaconda3
 -rw-r--r--  1 jg yandexcs   576 Aug 22 05:56 awesome.slurm
@@ -40,7 +40,7 @@ drwxr-sr-x  3 jg yandexcs  4096 Aug  8 03:28 tmp
 -rw-r--r--  1 jg yandexcs     0 Aug  9 19:36 yaakov.err
 -rw-r--r--  1 jg yandexcs     4 Aug  8 22:41 yaakov.out
 drwxr-sr-x 28 jg yandexcs  4096 Aug  8 04:20 yanaconda3
-I'd like to move all the files from here in to the folder TAU-Workshop except for anaconda3, ana3, and yanaconda3. I'd also like to overwrite any existing files there with the same name. What's a command that can do that?"
-#prompt = input("Please enter your prompt")
+I'd like to move all the files from here in to the folder TAU-Workshop except for anaconda3, ana3, and yanaconda3. I'd also like to overwrite any existing files there with the same name. What's a command that can do that?"""
+# prompt = input("Please enter your prompt")
 response = chat_with_gpt(prompt)
 print(response)

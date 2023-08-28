@@ -1,15 +1,21 @@
 from datasets import load_dataset
 from sklearn.metrics import precision_score, recall_score, f1_score, classification_report, confusion_matrix
 from chat_gpt import chat_with_gpt
+import openai
 
 TEST_PATH = "../train_labeled.csv"
 INITIAL_INSTRUCTIONS = "I'd like you to classify the following tweet if it's a sarcasm or not, print 1 if you think it's sarcasm and 0 if not."
 
+openai.organization = "tau-71"
+openai.api_key = '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'
+
 
 def get_predictions(ds):
-    predictions = [0] * len(ds["tweets"])
+    predictions = [0] * 20 # len(ds["tweets"])
     for i, tweet in enumerate(ds["tweets"]):
-        response = chat_with_gpt(INITIAL_INSTRUCTIONS, tweet)
+        if i == 20:
+            break
+        response = chat_with_gpt(INITIAL_INSTRUCTIONS, str(tweet))
         predictions[i] = response
     return predictions
 
@@ -46,7 +52,7 @@ def calculate_base_line(ds):
 
 def main():
     ds = load_dataset("csv", data_files=TEST_PATH, sep=",")
-    calculate_base_line(ds)
+    calculate_base_line(ds['train'].data)
 
 
 if __name__ == '__main__':
