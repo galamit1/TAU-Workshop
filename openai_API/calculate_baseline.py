@@ -3,26 +3,29 @@ from sklearn.metrics import precision_score, recall_score, f1_score, classificat
 from chat_gpt import chat_with_gpt
 import openai
 
-TEST_PATH = "../train_labeled.csv"
-INITIAL_INSTRUCTIONS = "I'd like you to classify the following tweet if it's a sarcasm or not, print 1 if you think it's sarcasm and 0 if not."
-
 openai.organization = "tau-71"
 openai.api_key = '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'
 
+TEST_PATH = "../train_labeled.csv"
+INITIAL_INSTRUCTIONS = "I'd like you to classify the following tweets if it's a sarcasm or not, print 1 if you think it's sarcasm and 0 if not. the tweets split with \\n, write the results on after the other, for example the output can be 0100011"
+
+TWEETS_IN_A_BUNCH = 5
+NUMBER_OF_BUNCHES = 2
+
 
 def get_predictions(ds):
-    predictions = [0] * 20 # len(ds["tweets"])
-    for i, tweet in enumerate(ds["tweets"]):
-        if i == 20:
-            break
-        response = chat_with_gpt(INITIAL_INSTRUCTIONS, str(tweet))
-        predictions[i] = response
+    predictions = []
+    for i in range(NUMBER_OF_BUNCHES):
+        tweets_done = i * TWEETS_IN_A_BUNCH
+        tweets_input = '\n'.join([str(tweet) for tweet in ds["tweets"][tweets_done: tweets_done + TWEETS_IN_A_BUNCH]])
+        response = chat_with_gpt(INITIAL_INSTRUCTIONS, str(tweets_input))
+        predictions += [int(res) for res in response]
     return predictions
 
 
 def calculate_base_line(ds):
-    y_true = ds["class"]
     y_pred = get_predictions(ds)
+    y_true = [i.as_py() for i in ds["class"][:len(y_pred)]]
 
     # Calculate Precision
     precision = precision_score(y_true, y_pred)
