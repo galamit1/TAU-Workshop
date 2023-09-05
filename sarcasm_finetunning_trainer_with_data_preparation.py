@@ -3,16 +3,17 @@ import os
 import numpy as np
 import torch
 from datasets import load_dataset, DatasetDict, Dataset, ClassLabel, Value, Features, DatasetBuilder
-from transformers import AutoTokenizer, get_scheduler, BertTokenizerFast
-from transformers import DataCollatorWithPadding
-from transformers import TrainingArguments
-from transformers import AutoModelForSequenceClassification
-from transformers import Trainer
+from transformers import AutoTokenizer, get_scheduler, BertTokenizerFast, DataCollatorWithPadding, TrainingArguments, AutoModelForSequenceClassification, Trainer
 import evaluate
 from torch.utils.data import DataLoader
 from transformers import AdamW
-from tqdm.auto import tqdm
+# from tqdm.auto import tqdm
 from torch.nn.parallel import DataParallel
+from data_preparation import clean_tweet
+
+# import os
+#
+# os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 train_path = "train_labeled.csv"
 validation_path = "validation_labeled.csv"  # the validation set is the same as the training set, need to change this
