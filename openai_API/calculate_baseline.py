@@ -8,18 +8,28 @@ openai.api_key = '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'
 
 TEST_PATH = "../train_labeled.csv"
 INITIAL_INSTRUCTIONS = "I'd like you to classify the following tweets if it's a sarcasm or not, print 1 if you think it's sarcasm and 0 if not. the tweets split with \\n, write the results on after the other, for example the output can be 0100011"
+INITIAL_INSTRUCTIONS = """I'd like you to classify the following tweets as sarcastic or not sarcastic. The tweet is sarcastic if it uses irony to mock or convey contempt or if the tweet suggests an alternative meaning that differs from the literal meaning of the words in the tweet.
+Here is an example of a sarcastic tweet:
+"Yea! great product! If you want to lose all your data in a year and be forced to pay to restore ..."
+The tweets are split with \\n
+Write the results as "Sarcastic" or "Not Sarcastic" by order of the input tweets and separated by commas. Do not print anything else."""
 
-TWEETS_IN_A_BUNCH = 5
-NUMBER_OF_BUNCHES = 2
+TWEETS_IN_A_BUNCH = 100
+NUMBER_OF_BUNCHES = 10
 
 
 def get_predictions(ds):
     predictions = []
     for i in range(NUMBER_OF_BUNCHES):
         tweets_done = i * TWEETS_IN_A_BUNCH
+        print("classified {} tweets out of {}".format(tweets_done, TWEETS_IN_A_BUNCH * NUMBER_OF_BUNCHES))
         tweets_input = '\n'.join([str(tweet) for tweet in ds["tweets"][tweets_done: tweets_done + TWEETS_IN_A_BUNCH]])
-        response = chat_with_gpt(INITIAL_INSTRUCTIONS, str(tweets_input))
-        predictions += [int(res) for res in response]
+        try:
+            response = chat_with_gpt(INITIAL_INSTRUCTIONS, str(tweets_input))
+            predictions += [int(res.strip() == 'Sarcastic') for res in response.split(',')]
+        except Exception as e:  # in case of an error, continue with what we have so far
+            print("stopped with an error: " + str(e))
+            break
     return predictions
 
 
@@ -55,6 +65,7 @@ def calculate_base_line(ds):
 
 def main():
     ds = load_dataset("csv", data_files=TEST_PATH, sep=",")
+    # TODO load evaluation set or shuffle
     calculate_base_line(ds['train'].data)
 
 
