@@ -13,6 +13,12 @@ from torch.utils.data import DataLoader
 from transformers import AdamW
 from tqdm.auto import tqdm
 from torch.nn.parallel import DataParallel
+# import wandb
+#
+#
+# wandb.login()
+
+
 
 train_path = "train_labeled.csv"
 validation_path = "validation_labeled.csv"  # the validation set is the same as the training set, need to change this
@@ -90,7 +96,7 @@ else:
 
 
 def compute_metrics(eval_preds):
-    metric = evaluate.load("accuracy")
+    metric = evaluate.combine(["accuracy", "f1", "precision", "recall"])
     logits, labels = eval_preds
     predictions = np.argmax(logits, axis=-1)
     return metric.compute(predictions=predictions, references=labels)
@@ -108,6 +114,7 @@ training_args = TrainingArguments(output_dir=output_dir,
                                   evaluation_strategy="epoch",
                                   push_to_hub=False,
                                   # fp16=True, #for cuda only
+                                  # report_to="wandb"
                                   )
 
 trainer = Trainer(
