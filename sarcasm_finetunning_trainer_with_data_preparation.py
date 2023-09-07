@@ -10,6 +10,7 @@ from transformers import AdamW
 # from tqdm.auto import tqdm
 from torch.nn.parallel import DataParallel
 from data_preparation import clean_tweet
+import wandb
 
 # import os
 #
@@ -40,8 +41,8 @@ tokenized_datasets = tokenized_datasets.rename_column("class", "label")
 tokenized_datasets.set_format("torch")
 
 # delete later and unindent two last rows. processing a small subset only tor testing
-train_dataset = tokenized_datasets["train"].shuffle(seed=42).select(range(50))
-eval_dataset = tokenized_datasets["test"].shuffle(seed=42).select(range(50))
+train_dataset = tokenized_datasets["train"].shuffle(seed=42).select(range(20))
+eval_dataset = tokenized_datasets["test"].shuffle(seed=42).select(range(20))
 # train_dataset = tokenized_datasets["train"]
 # eval_dataset = tokenized_datasets["test"]
 
@@ -91,7 +92,8 @@ else:
 
 
 def compute_metrics(eval_preds):
-    metric = evaluate.load("accuracy")
+    metric = evaluate.combine(["accuracy", "f1", "precision", "recall"])
+    logits, labels = eval_preds
     logits, labels = eval_preds
     predictions = np.argmax(logits, axis=-1)
     return metric.compute(predictions=predictions, references=labels)
@@ -108,6 +110,7 @@ training_args = TrainingArguments(output_dir=output_dir,
                                   overwrite_output_dir=True,
                                   evaluation_strategy="epoch",
                                   push_to_hub=False,
+                                  report_to="wandb",
                                   # fp16=True, #for cuda only
                                   )
 
@@ -120,11 +123,12 @@ trainer = Trainer(
     tokenizer=tokenizer,
     compute_metrics=compute_metrics,
 )
-evel_results = trainer.evaluate()
-print(evel_results)
+# evel_results = trainer.evaluate()
+# print(evel_results)
 trainer.train()
-evel_results = trainer.evaluate()
-print(evel_results)
+wandb.finish()
+# evel_results = trainer.evaluate()
+# print(evel_results)
 trainer.save_model(pretrained_dir)
 
 # trainer.push_to_hub()
