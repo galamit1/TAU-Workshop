@@ -1,0 +1,273 @@
+classified 0 tweets out of 2000
+classified 100 tweets out of 2000
+classified 200 tweets out of 2000
+classified 300 tweets out of 2000
+classified 400 tweets out of 2000
+classified 500 tweets out of 2000
+classified 600 tweets out of 2000
+classified 700 tweets out of 2000
+classified 800 tweets out of 2000
+classified 900 tweets out of 2000
+classified 1000 tweets out of 2000
+classified 1100 tweets out of 2000
+classified 1200 tweets out of 2000
+classified 1300 tweets out of 2000
+stopped with an error: This model's maximum context length is 4097 tokens. However, you requested 4238 tokens (4088 in the messages, 150 in the completion). Please reduce the length of the messages or completion.
+Precision: 0.7754237288135594
+Recall: 0.5304347826086957
+F1-Score: 0.629948364888124
+Support for each class: [98, 345]
+Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.22      0.46      0.30        98
+           1       0.78      0.53      0.63       345
+
+    accuracy                           0.51       443
+   macro avg       0.50      0.49      0.46       443
+weighted avg       0.65      0.51      0.56       443
+
+Confusion Matrix:
+ [[ 45  53]
+ [162 183]]
+
+
+/Users/agal/opt/miniconda3/bin/python /Applications/PyCharm.app/Contents/plugins/python/helpers/pydev/pydevd.py --multiproc --qt-support=auto --client 127.0.0.1 --port 55915 --file /Users/agal/Desktop/TAU/workshop/TAU-Workshop/openai_API/completion/calculate_baseline.py
+Connected to pydev debugger (build 212.4746.96)
+Found cached dataset csv (/Users/agal/.cache/huggingface/datasets/csv/default-281b1d356cf1cceb/0.0.0/6954658bab30a358235fa864b05cf819af0e179325c740e4bc853bcc7ec513e1)
+100%|██████████| 1/1 [00:00<00:00, 47.28it/s]
+classified 0 tweets out of 200
+20
+20
+classified 20 tweets out of 200
+20
+40
+classified 40 tweets out of 200
+20
+60
+classified 60 tweets out of 200
+20
+80
+classified 80 tweets out of 200
+20
+100
+classified 100 tweets out of 200
+20
+120
+classified 120 tweets out of 200
+20
+140
+classified 140 tweets out of 200
+20
+160
+classified 160 tweets out of 200
+20
+180
+classified 180 tweets out of 200
+20
+200
+Precision: 0.8688524590163934
+Recall: 0.53
+F1-Score: 0.6583850931677019
+Support for each class: [100, 100]
+Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.66      0.92      0.77       100
+           1       0.87      0.53      0.66       100
+
+    accuracy                           0.73       200
+   macro avg       0.77      0.73      0.71       200
+weighted avg       0.77      0.72      0.71       200
+
+Confusion Matrix:
+ [[92  8]
+ [47 53]]
+
+Process finished with exit code 0
+
+/Users/agal/opt/miniconda3/bin/python /Users/agal/Desktop/TAU/workshop/TAU-Workshop/openai_API/completion/calculate_baseline.py
+Found cached dataset csv (/Users/agal/.cache/huggingface/datasets/csv/default-281b1d356cf1cceb/0.0.0/6954658bab30a358235fa864b05cf819af0e179325c740e4bc853bcc7ec513e1)
+100%|██████████| 1/1 [00:00<00:00, 489.42it/s]
+classified 0 tweets out of 1000
+20
+20
+classified 20 tweets out of 1000
+20
+40
+classified 40 tweets out of 1000
+20
+60
+classified 60 tweets out of 1000
+20
+80
+classified 80 tweets out of 1000
+20
+100
+classified 100 tweets out of 1000
+20
+120
+classified 120 tweets out of 1000
+20
+140
+classified 140 tweets out of 1000
+20
+160
+classified 160 tweets out of 1000
+20
+180
+classified 180 tweets out of 1000
+20
+200
+classified 200 tweets out of 1000
+20
+220
+classified 220 tweets out of 1000
+20
+240
+classified 240 tweets out of 1000
+20
+260
+classified 260 tweets out of 1000
+20
+280
+classified 280 tweets out of 1000
+20
+300
+classified 300 tweets out of 1000
+20
+320
+classified 320 tweets out of 1000
+20
+340
+classified 340 tweets out of 1000
+20
+360
+classified 360 tweets out of 1000
+20
+380
+classified 380 tweets out of 1000
+20
+400
+classified 400 tweets out of 1000
+19
+20
+420
+classified 420 tweets out of 1000
+20
+440
+classified 440 tweets out of 1000
+20
+460
+classified 460 tweets out of 1000
+20
+480
+classified 480 tweets out of 1000
+19
+20
+500
+classified 500 tweets out of 1000
+20
+520
+classified 520 tweets out of 1000
+20
+540
+classified 540 tweets out of 1000
+20
+560
+classified 560 tweets out of 1000
+20
+580
+classified 580 tweets out of 1000
+20
+600
+classified 600 tweets out of 1000
+20
+620
+classified 620 tweets out of 1000
+20
+640
+classified 640 tweets out of 1000
+20
+660
+classified 660 tweets out of 1000
+20
+680
+classified 680 tweets out of 1000
+19
+19
+classified 700 tweets out of 1000
+20
+700
+classified 720 tweets out of 1000
+20
+720
+classified 740 tweets out of 1000
+20
+740
+classified 760 tweets out of 1000
+20
+760
+classified 780 tweets out of 1000
+20
+780
+classified 800 tweets out of 1000
+20
+800
+classified 820 tweets out of 1000
+19
+20
+820
+classified 840 tweets out of 1000
+20
+840
+classified 860 tweets out of 1000
+19
+20
+860
+classified 880 tweets out of 1000
+19
+19
+classified 900 tweets out of 1000
+20
+880
+classified 920 tweets out of 1000
+20
+900
+classified 940 tweets out of 1000
+20
+920
+classified 960 tweets out of 1000
+20
+940
+classified 980 tweets out of 1000
+20
+960
+Precision: 0.8583815028901735
+Recall: 0.61875
+F1-Score: 0.7191283292978209
+Support for each class: [480, 480]
+Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.70      0.90      0.79       480
+           1       0.86      0.62      0.72       480
+
+    accuracy                           0.76       960
+   macro avg       0.78      0.76      0.75       960
+weighted avg       0.78      0.76      0.75       960
+
+Confusion Matrix:
+ [[431  49]
+ [183 297]]
+
+Process finished with exit code 0
+
+## edit to 1000
+Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.70      0.90      0.79       500
+           1       0.86      0.62      0.72       500
+
+    accuracy                           0.76       500

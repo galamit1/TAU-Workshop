@@ -1,6 +1,7 @@
 import string
 from nltk.corpus import stopwords
 import re
+from pandas import read_csv, DataFrame
 
 remove_punctuations = lambda input: ''.join([char for char in input if char not in string.punctuation])
 remove_stop_words = lambda input: ' '.join(
@@ -49,4 +50,29 @@ def clean_tweet(tweet):
     tweet = remove_emoji(tweet)
     tweet = remove_punctuations(tweet)
     tweet = remove_stop_words(tweet)
-    return tweet
+    return tweet.strip().replace('  ', ' ')
+
+
+PATH = 'train_labeled.csv'
+
+
+def main():
+    df = read_csv(PATH)
+
+    output = []
+    for item in df.values:
+        cleaned = clean_tweet(item[0])
+        item[0] = cleaned
+        if len(cleaned) > 5:
+            output.append(item)
+
+    output = DataFrame(output)
+    out = output.to_csv(index=False, header=True)
+
+    output_file = PATH[:-4] + '_prepared.csv'
+    with open(output_file, 'w') as f:
+        f.write(out)
+
+
+if __name__ == '__main__':
+    main()
