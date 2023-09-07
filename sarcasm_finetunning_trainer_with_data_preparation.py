@@ -20,12 +20,13 @@ train_path = "train_labeled.csv"
 validation_path = "validation_labeled.csv"  # the validation set is the same as the training set, need to change this
 test_path = "test_labeled.csv"
 
-file_dict = {"train": [train_path],
-             "validation": [validation_path],
-             "test": [test_path]}
+test_dataset = load_dataset("csv", data_files=test_path, sep=",")
+train_dataset = load_dataset("csv", data_files=train_path, sep=",")
+train_ds = train_dataset["train"]
+test_ds = test_dataset["train"]
 
 raw_datasets = load_dataset("csv", data_files=file_dict, sep=",")
-checkpoint = "bert-base-uncased"
+checkpoint = "bert-base-cased"
 tokenizer = AutoTokenizer.from_pretrained(checkpoint, use_fast=True)
 
 
@@ -35,14 +36,20 @@ def tokenize_function(examples):
     return tokenizer(examples["tweets"], truncation=True)
 
 
-tokenized_datasets = raw_datasets.map(tokenize_function, batched=True)
-tokenized_datasets = tokenized_datasets.remove_columns(["tweets"])
-tokenized_datasets = tokenized_datasets.rename_column("class", "label")
-tokenized_datasets.set_format("torch")
+tokenized_train_datasets = train_ds.map(tokenize_function, batched=True)
+tokenized_test_datasets = test_ds.map(tokenize_function, batched=True)
+
+tokenized_train_datasets = tokenized_train_datasets.remove_columns(["tweets"])
+tokenized_train_datasets = tokenized_train_datasets.rename_column("class", "labels")
+tokenized_train_datasets.set_format("torch")
+tokenized_test_datasets = tokenized_test_datasets.remove_columns(["tweets"])
+tokenized_test_datasets = tokenized_test_datasets.rename_column("class", "labels")
+tokenized_test_datasets.set_format("torch")
+
 
 # delete later and unindent two last rows. processing a small subset only tor testing
-train_dataset = tokenized_datasets["train"].shuffle(seed=42).select(range(20))
-eval_dataset = tokenized_datasets["test"].shuffle(seed=42).select(range(20))
+train_dataset = tokenized_train_datasets.shuffle(seed=42).select(range(20))
+eval_dataset = tokenized_test_datasets.shuffle(seed=42).select(range(20))
 # train_dataset = tokenized_datasets["train"]
 # eval_dataset = tokenized_datasets["test"]
 
