@@ -12,22 +12,21 @@ from torch.nn.parallel import DataParallel
 from data_preparation import clean_tweet
 import wandb
 
-# import os
-#
-# os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
-train_path = "train_labeled.csv"
-validation_path = "validation_labeled.csv"  # the validation set is the same as the training set, need to change this
-test_path = "test_labeled.csv"
+#os.environ['KMP_DUPLICATE_LIB_OK']='True'
+wandb.login()
+run = wandb.init(project="Sarcasm_from_saved_finetuned_eval_results")
+
+train_path = "/home/yandex/MLW2023/mikahurvits/TAU-Workshop/train_labeled_5000_balanced.csv"
+test_path = "/home/yandex/MLW2023/mikahurvits/TAU-Workshop/test_labeled_1000_balanced.csv"
 
 test_dataset = load_dataset("csv", data_files=test_path, sep=",")
 train_dataset = load_dataset("csv", data_files=train_path, sep=",")
 train_ds = train_dataset["train"]
 test_ds = test_dataset["train"]
 
-raw_datasets = load_dataset("csv", data_files=file_dict, sep=",")
-checkpoint = "bert-base-cased"
-tokenizer = AutoTokenizer.from_pretrained(checkpoint, use_fast=True)
+checkpoint = "bert-base-uncased"
+tokenizer = AutoTokenizer.from_pretrained(checkpoint, use_fast=True, trust_remote_code=True)
 
 
 # This function takes a dictionary (like the items of our dataset) and returns a new dictionary with the keys input_ids,
@@ -48,8 +47,8 @@ tokenized_test_datasets.set_format("torch")
 
 
 # delete later and unindent two last rows. processing a small subset only tor testing
-train_dataset = tokenized_train_datasets.shuffle(seed=42).select(range(20))
-eval_dataset = tokenized_test_datasets.shuffle(seed=42).select(range(20))
+train_dataset = tokenized_train_datasets.shuffle(seed=42).select(range(100))
+eval_dataset = tokenized_test_datasets.shuffle(seed=42).select(range(100))
 # train_dataset = tokenized_datasets["train"]
 # eval_dataset = tokenized_datasets["test"]
 
@@ -111,33 +110,36 @@ def compute_metrics(eval_preds):
 #
 # notebook_login()
 
-output_dir = "SarcasmModel-finetuned"
-pretrained_dir = os.path.join(output_dir, 'pretrained')
+output_dir = "/home/yandex/MLW2023/mikahurvits/TAU-Workshop/SarcasmModel-finetuned"
+#pretrained_dir = os.path.join(output_dir, 'pretrained')
 training_args = TrainingArguments(output_dir=output_dir,
                                   overwrite_output_dir=True,
-                                  evaluation_strategy="epoch",
+                                 # evaluation_strategy="epoch",
+				  evaluation_strategy="steps",
                                   push_to_hub=False,
                                   report_to="wandb",
-                                  # fp16=True, #for cuda only
+                                  fp16=True, #for cuda only
                                   )
 
 trainer = Trainer(
     model=model,
+   # model_init=model,
     args=training_args,
     train_dataset=train_dataset,
     eval_dataset=eval_dataset,
     data_collator=data_collator,
     tokenizer=tokenizer,
     compute_metrics=compute_metrics,
+    callbacks=['WandbCallback'],
 )
-# evel_results = trainer.evaluate()
-# print(evel_results)
-trainer.train()
-wandb.finish()
-# evel_results = trainer.evaluate()
-# print(evel_results)
-trainer.save_model(pretrained_dir)
 
+#evel_results = trainer.evaluate()
+#print(evel_results)
+trainer.train()
+evel_results = trainer.evaluate()
+print(evel_results)
+trainer.save_model(output_dir)
+wandb.finish()
 # trainer.push_to_hub()
 
 
