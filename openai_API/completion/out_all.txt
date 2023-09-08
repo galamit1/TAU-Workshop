@@ -270,4 +270,4 @@ Classification Report:
            0       0.70      0.90      0.79       500
            1       0.86      0.62      0.72       500
 
-    accuracy                           0.76       500
+    accuracy                           0.76       1000
