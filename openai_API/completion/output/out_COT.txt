@@ -1,20 +1,3 @@
-classified 720 tweets out of 1000
-stopped with an error: Request timed out: HTTPSConnectionPool(host='api.openai.com', port=443): Read timed out. (read timeout=600)
-Precision: 0.8652173913043478
-Recall: 0.5685714285714286
-F1-Score: 0.6862068965517242
-Support for each class: [350, 350]
-Classification Report:
-               precision    recall  f1-score   support
-
-           0       0.68      0.91      0.78       350
-           1       0.87      0.57      0.69       350
-
-    accuracy                           0.74       700
-   macro avg       0.77      0.74      0.73       700
-weighted avg       0.77      0.74      0.73       700
-
-
 Precision: 0.6952908587257618
 Recall: 0.502
 F1-Score: 0.5830429732868758

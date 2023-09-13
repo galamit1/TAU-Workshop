@@ -17,7 +17,7 @@ TEST_PATH = "validation_labeled_2000_balanced.csv"
 
 CHAIN_OF_THOUGHTS = False
 
-TWEETS_IN_A_BUNCH = 20 #40
+TWEETS_IN_A_BUNCH = 20
 NUMBER_OF_BUNCHES = 50
 
 
@@ -83,7 +83,7 @@ def calculate_base_line(ds):
 def main():
     ds = load_dataset("csv", data_files=TEST_PATH, sep=",")
     if CHAIN_OF_THOUGHTS:
-        with open('../../COT/sarcasm_reasoning_train.csv', 'r') as f:
+        with open('sarcasm_reasoning_train_for_chain_of_thoughts.csv', 'r') as f:
             COT_prompt = f.read()
         print(chat_with_gpt("", COT_prompt))
     calculate_base_line(ds['train'].data)

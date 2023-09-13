@@ -3,8 +3,8 @@ import json
 training_data = 'train_labeled_5000_balanced.csv'
 validation_data = 'validation_labeled_2000_balanced.csv'
 
-training_file_name = "training_data.jsonl"
-validation_file_name = "validation_data.jsonl"
+training_file_name = "input/training_data.jsonl"
+validation_file_name = "input/validation_data.jsonl"
 
 MAX_SIZE = 100
 
@@ -60,7 +60,7 @@ def upload_files():
     )
 
     validate = openai.File.create(
-      file=open("validation_data.jsonl", "rb"),
+      file=open("input/validation_data.jsonl", "rb"),
       purpose='fine-tune'
     )
 
@@ -250,6 +250,6 @@ print(status)
 # }
 
 content = openai.File.download("file-AuIoJJSOKY5jXpH4iIruuPoe")
-print(content)
+# print(content)
 contents = content.decode()
 print(contents)
