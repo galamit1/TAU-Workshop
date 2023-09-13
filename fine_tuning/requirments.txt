@@ -2,5 +2,6 @@ numpy
 torch
 datasets
 transformers
-nltk
+tqdm
 evaluate
+argparse
