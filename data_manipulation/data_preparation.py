@@ -53,7 +53,7 @@ def clean_tweet(tweet):
     return tweet.strip().replace('  ', ' ')
 
 
-PATH = 'input/train_labeled.csv'
+PATH = '../input/train_labeled.csv'
 
 
 def main():

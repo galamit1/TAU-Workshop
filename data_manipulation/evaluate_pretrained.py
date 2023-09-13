@@ -11,7 +11,7 @@ model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIRECTORY)
 tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
 
 # Load your test dataset
-TEST_PATH = "input/validation_labeled_2000_balanced.csv"
+TEST_PATH = "../input/validation_labeled_2000_balanced.csv"
 ds = load_dataset("csv", data_files=TEST_PATH, split="train", delimiter=",")
 
 # Extract the input sentences and true labels
