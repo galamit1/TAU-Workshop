@@ -44,11 +44,10 @@ tokenized_train_datasets.set_format("torch")
 small_train_dataset = tokenized_train_datasets.shuffle(seed=42)
 small_eval_dataset = tokenized_test_datasets.shuffle(seed=42)
 
-
-
 metric = evaluate.load("accuracy")
 
 """Call `compute` on `metric` to calculate the accuracy of your predictions. Before passing your predictions to `compute`, you need to convert the predictions to logits (remember all 🤗 Transformers models return logits):"""
+
 
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
@@ -56,23 +55,19 @@ def compute_metrics(eval_pred):
     return metric.compute(predictions=predictions, references=labels)
 
 
-
 """### DataLoader
 
 Create a `DataLoader` for your training and test datasets so you can iterate over batches of data:
 """
-
 
 train_dataloader = DataLoader(small_train_dataset, shuffle=True, batch_size=8)
 eval_dataloader = DataLoader(small_eval_dataset, batch_size=8)
 
 """Load your model with the number of expected labels:"""
 
-
 model = AutoModelForSequenceClassification.from_pretrained("bert-base-cased", num_labels=2)
 
 """Lastly, specify `device` to use a GPU if you have access to one. Otherwise, training on a CPU may take several hours instead of a couple of minutes."""
-
 
 if torch.cuda.is_available():
     print("cuda")
@@ -92,7 +87,6 @@ Create an optimizer and learning rate scheduler to fine-tune the model. Let's us
 optimizer = AdamW(model.parameters(), lr=5e-5)
 
 """Create the default learning rate scheduler from [Trainer](https://huggingface.co/docs/transformers/main/en/main_classes/trainer#transformers.Trainer):"""
-
 
 num_epochs = 3
 num_training_steps = num_epochs * len(train_dataloader)
@@ -115,24 +109,23 @@ Great, now you are ready to train! 🥳
 To keep track of your training progress, use the [tqdm](https://tqdm.github.io/) library to add a progress bar over the number of training steps:
 """
 
-
 progress_bar = tqdm(range(num_training_steps))
 
 model.train()
 for epoch in range(num_epochs):
     for batch in train_dataloader:
-#        input_ids = batch["input_ids"].to(device)
-#        attention_mask = batch["attention_mask"].to(device)
-#        labels = batch["labels"].to(device)
-#
-#        # Now you can create a new dictionary to pass to the model
-#        inputs = {
-#            "input_ids": input_ids,
-#            "attention_mask": attention_mask,
-#            "labels": labels,
-#        }
-#
-#        outputs = model(**inputs)
+        #        input_ids = batch["input_ids"].to(device)
+        #        attention_mask = batch["attention_mask"].to(device)
+        #        labels = batch["labels"].to(device)
+        #
+        #        # Now you can create a new dictionary to pass to the model
+        #        inputs = {
+        #            "input_ids": input_ids,
+        #            "attention_mask": attention_mask,
+        #            "labels": labels,
+        #        }
+        #
+        #        outputs = model(**inputs)
         batch = {k: v.to(device) for k, v in batch.items()}
         outputs = model(**batch)
         loss = outputs.loss
@@ -144,19 +137,16 @@ for epoch in range(num_epochs):
         optimizer.zero_grad()
         progress_bar.update(1)
 
-
 #    for batch in train_dataloader:
 #        loss = outputs.loss
-        
+
 model.module.save_pretrained("/home/yandex/MLW2023/jg/pretrained_sarcasm_on_bert")
 print("saved")
-
 
 """### Evaluate
 
 Just like how you added an evaluation function to [Trainer](https://huggingface.co/docs/transformers/main/en/main_classes/trainer#transformers.Trainer), you need to do the same when you write your own training loop. But instead of calculating and reporting the metric at the end of each epoch, this time you'll accumulate all the batches with `add_batch` and calculate the metric at the very end.
 """
-
 
 metric = evaluate.load("accuracy")
 model.eval()
@@ -182,8 +172,10 @@ For more fine-tuning examples, refer to:
 
 - [🤗 Transformers Notebooks](https://huggingface.co/docs/transformers/main/en/notebooks) contains various notebooks on how to fine-tune a model for specific tasks in PyTorch and TensorFlow.
 """
+
+
 # For single tests of the models accuracy. Returns an int
-def yaakov_single_test(input_str):
+def single_test(input_str):
     batch = tokenizer(input_str, padding="max_length", truncation=True, return_tensors="pt")
     batch = {k: v.to(device) for k, v in batch.items()}
     with torch.no_grad():
@@ -191,7 +183,3 @@ def yaakov_single_test(input_str):
     logits = outputs.logits
     predictions = torch.argmax(logits, dim=-1)
     return predictions.item()
-
-
-
-

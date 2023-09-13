@@ -1,9 +1,9 @@
 from pandas import read_csv, DataFrame
 
-d = read_csv('train_labeled.csv')
+d = read_csv('input/train_labeled.csv')
 shuffled_df = d.sample(frac=1, random_state=42)
 
-NUMBER_OF_EACH_CLASS = 20000
+NUMBER_OF_EACH_CLASS = 2500
 TIMES = 1
 
 count_by_class = {0: 0, 1: 0}

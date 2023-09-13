@@ -83,7 +83,7 @@ model.eval()
 model = AutoModelForSequenceClassification.from_saved("/home/yandex/MLW2023/jg/pretrained_sarcasm_on_bert_full")
 
 # For single tests of the models accuracy. Returns an int
-def yaakov_single_test(input_str):
+def single_test(input_str):
     batch = tokenizer(input_str, padding="max_length", truncation=True, return_tensors="pt")
     batch = {k: v.to(device) for k, v in batch.items()}
     with torch.no_grad():

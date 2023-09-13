@@ -192,7 +192,7 @@ For more fine-tuning examples, refer to:
 - [🤗 Transformers Notebooks](https://huggingface.co/docs/transformers/main/en/notebooks) contains various notebooks on how to fine-tune a model for specific tasks in PyTorch and TensorFlow.
 """
 # For single tests of the models accuracy. Returns an int
-def yaakov_single_test(input_str):
+def single_test(input_str):
     batch = tokenizer(input_str, padding="max_length", truncation=True, return_tensors="pt")
     batch = {k: v.to(device) for k, v in batch.items()}
     with torch.no_grad():
