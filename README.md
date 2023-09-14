@@ -70,6 +70,7 @@ Feel free to adapt this script to your specific needs, such as changing hyperpar
     ```python
     CHAIN_OF_THOUGHTS = True
     ```
+## Fine Tune OpenAI model
 
 - **[Chat GPT Fine Tuning Ada Model](https://github.com/galamit1/TAU-Workshop/tree/main/openapi/fine_tuning)**
 
