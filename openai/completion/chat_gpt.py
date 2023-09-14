@@ -1,8 +1,8 @@
 import openai
 
-# Set up your OpenAI API key
-openai.organization = "tau-71"
-openai.api_key = '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'
+# TODO add api keys:
+# openai.organization = ""
+# openai.api_key = ""
 
 
 # Define a function to send a message to ChatGPT and get a response

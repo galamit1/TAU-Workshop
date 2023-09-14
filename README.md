@@ -1,6 +1,9 @@
 #Detecting Sarcasm/Cynicism in Tweets
+
 ###Jacob Goldsmith, Gal Amit, Mika Hurvits
+
 ####Tel Aviv University
+
 #####September 2023
 _____
 This repository contains the code that have been done for the workshop.
@@ -13,7 +16,7 @@ This repository contains the code that have been done for the workshop.
 
 Certainly! Here's an updated section for the "Fine Tuning bert-base-cased" in your README to include instructions for running the fine-tuning script on any saved model and any data, as well as saving the fine-tuned model to any output:
 
-```markdown
+
 ## Fine Tuning bert-base-cased
 
 - **[Fine Tuning](https://github.com/galamit1/TAU-Workshop/tree/main/fine_tuning)**
@@ -53,18 +56,23 @@ Certainly! Here's an updated section for the "Fine Tuning bert-base-cased" in yo
 7. You can now use this fine-tuned model to classify sarcasm/cynicism in tweets.
 
 Feel free to adapt this script to your specific needs, such as changing hyperparameters or using a different pretrained model.
-```
+
 
 ## Chat GPT Baseline Calculation
 
 - **[Chat GPT Baseline](https://github.com/galamit1/TAU-Workshop/tree/main/openapi/completion)**
 
-  TODO
+  The `calculate_baseline.py` code loads the validation dataset and calculates the results by querying Chat GPT API for the classifications.
+
+    For tokens optimizations and to avoid errors, there were done manipulations on the questions and the way we query the API by sending butches. 
 
 - **[Chat GPT Chain Of Thoughts](https://github.com/galamit1/TAU-Workshop/tree/main/openapi/completion)**
 
-  TODO
+  The Chain Of Thoughts process is done automatically by enabling in the The `calculate_baseline.py` code:
+    ```python
+    CHAIN_OF_THOUGHTS = True
+    ```
 
-- **[Chat GPT Fine Tuning Ada Model](https://github.com/galamit1/TAU-Workshop/tree/main/openapi/completion)**
+- **[Chat GPT Fine Tuning Ada Model](https://github.com/galamit1/TAU-Workshop/tree/main/openapi/fine_tuning)**
 
-  TODO
+  The Fine Tuning process flow is described in the code in `fine_tune_ada_model.py`, together with the expected output.

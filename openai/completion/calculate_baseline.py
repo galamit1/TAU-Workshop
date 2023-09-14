@@ -3,8 +3,9 @@ from sklearn.metrics import precision_score, recall_score, f1_score, classificat
 from chat_gpt import chat_with_gpt
 import openai
 
-openai.organization = "tau-71"
-openai.api_key = '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'
+# TODO add api keys:
+# openai.organization = ""
+# openai.api_key = ""
 
 INITIAL_INSTRUCTIONS = "I'd like you to classify the following tweets if it's a sarcasm or not, print 1 if you think it's sarcasm and 0 if not. the tweets split with \\n, write the results on after the other, for example the output can be 0100011"
 INITIAL_INSTRUCTIONS = """I'd like you to classify the following tweets as sarcastic or not sarcastic. The tweet is sarcastic if it uses irony to mock or convey contempt or if the tweet suggests an alternative meaning that differs from the literal meaning of the words in the tweet.

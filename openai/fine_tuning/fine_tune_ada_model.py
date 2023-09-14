@@ -48,8 +48,9 @@ def prepare():
 
 import openai
 
-openai.organization = "tau-71"
-openai.api_key = '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'
+# TODO add api keys:
+# openai.organization = ""
+# openai.api_key = ""
 
 # upload the files and save the ids
 
@@ -73,10 +74,6 @@ def upload_files():
 def create_ft():
     ft = openai.FineTune.create(
         model="ada",
-        # messages=[
-        #     {"role": "system", "content": "I'd like you to classify the following tweets if it's a sarcastic or not"},
-        #     {"role": "user", "content": "I'd like you to classify the following tweets if it's a sarcastic or not"}
-        # ],
         training_file="file-i0y8DIeD4jy4gGTwPbkOg5Fi",
         validation_file="file-1u85iwwaLopl5Faotl7rJ2yH",
         classification_positive_class=" Sarcastic\n",
@@ -220,8 +217,9 @@ def create_ft():
 
 # see the model status
 
-status = openai.FineTune.retrieve("ft-FOW9iRpuSmPQzm4hdTPjrqNF")
-print(status)
+def print_status():
+    status = openai.FineTune.retrieve("ft-FOW9iRpuSmPQzm4hdTPjrqNF")
+    print(status)
 #     {
 #       "object": "fine-tune-event",
 #       "level": "info",
@@ -249,7 +247,7 @@ print(status)
 #   ]
 # }
 
-content = openai.File.download("file-AuIoJJSOKY5jXpH4iIruuPoe")
-# print(content)
-contents = content.decode()
-print(contents)
+def print_results():
+    content = openai.File.download("file-AuIoJJSOKY5jXpH4iIruuPoe")
+    contents = content.decode()
+    print(contents)
