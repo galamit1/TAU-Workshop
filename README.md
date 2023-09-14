@@ -58,13 +58,13 @@ Feel free to adapt this script to your specific needs, such as changing hyperpar
 
 ## Chat GPT Baseline Calculation
 
-- **[Chat GPT Baseline](https://github.com/galamit1/TAU-Workshop/tree/main/openapi/completion)**
+- **[Chat GPT Baseline](https://github.com/galamit1/TAU-Workshop/tree/main/openai/completion)**
 
   The `calculate_baseline.py` code loads the validation dataset and calculates the results by querying Chat GPT API for the classifications.
 
     For tokens optimizations and to avoid errors, there were done manipulations on the questions and the way we query the API by sending butches. 
 
-- **[Chat GPT Chain Of Thoughts](https://github.com/galamit1/TAU-Workshop/tree/main/openapi/completion)**
+- **[Chat GPT Chain Of Thoughts](https://github.com/galamit1/TAU-Workshop/tree/main/openai/completion)**
 
   The Chain Of Thoughts process is done automatically by enabling in the The `calculate_baseline.py` code:
     ```python
@@ -72,6 +72,6 @@ Feel free to adapt this script to your specific needs, such as changing hyperpar
     ```
 ## Fine Tune OpenAI model
 
-- **[Chat GPT Fine Tuning Ada Model](https://github.com/galamit1/TAU-Workshop/tree/main/openapi/fine_tuning)**
+- **[Chat GPT Fine Tuning Ada Model](https://github.com/galamit1/TAU-Workshop/tree/main/openai/fine_tuning)**
 
   The Fine Tuning process flow is described in the code in `fine_tune_ada_model.py`, together with the expected output.
