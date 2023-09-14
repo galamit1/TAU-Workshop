@@ -1,10 +1,8 @@
-#Detecting Sarcasm/Cynicism in Tweets
+# Detecting Sarcasm/Cynicism in Tweets
 
-###Jacob Goldsmith, Gal Amit, Mika Hurvits
-
-####Tel Aviv University
-
-#####September 2023
+### Jacob Goldsmith, Gal Amit, Mika Hurvits
+#### Tel Aviv University
+##### September 2023
 _____
 This repository contains the code that have been done for the workshop.
 
