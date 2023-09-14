@@ -4,7 +4,7 @@
 #### Tel Aviv University
 ##### September 2023
 _____
-This repository contains the code that have been done for the workshop.
+This repository contains the code that has been done for the machine learning workshop at Tel Aviv University.
 
 ## Data
 
