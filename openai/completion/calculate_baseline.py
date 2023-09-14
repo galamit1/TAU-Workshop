@@ -16,7 +16,7 @@ Write the 20 results for each tweet as "Sarcastic" or "Not Sarcastic" by order o
 
 TEST_PATH = "validation_labeled_2000_balanced.csv"
 
-CHAIN_OF_THOUGHTS = False
+CHAIN_OF_THOUGHTS = True
 
 TWEETS_IN_A_BUNCH = 20
 NUMBER_OF_BUNCHES = 50
@@ -84,7 +84,7 @@ def calculate_base_line(ds):
 def main():
     ds = load_dataset("csv", data_files=TEST_PATH, sep=",")
     if CHAIN_OF_THOUGHTS:
-        with open('sarcasm_reasoning_train_for_chain_of_thoughts.csv', 'r') as f:
+        with open('sarcasm_reasoning_train_for_chain_of_thoughts2.csv', 'r') as f:
             COT_prompt = f.read()
         print(chat_with_gpt("", COT_prompt))
     calculate_base_line(ds['train'].data)
